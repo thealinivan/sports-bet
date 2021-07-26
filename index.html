@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsBet</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="icon" type="image/" href="img/logo.jpg">
+</head>
+
+<body>
+
+    <header>
+        <!-- search -->
+        <nav>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="img/logo.jpg" alt="sportsbet logo" style="width:40px;">
+                        <b>SportsBet</b>
+                    </a>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"
+                            id="search">
+                        <button id="btn" href="#" class="btn btn-outline-success" type="submit" id="btn">Search</button>
+                    </form>
+
+                </div>
+            </nav>
+        </nav>
+    </header>
+
+    <main>
+        <section class="card marg-1 center-text padd-1">
+            <h1 class="light-back padd-1 marg-1">Statistics</h1>
+            <div>
+                <p id="bets-no" class="card marg-1">Number of games: <b>2</b></p>
+                <!-- <p class="card marg-1">Number of bets: <b>6</b></p>
+                <p class="card marg-1">Total amount bet: <b>£600</b></p>
+                <p class="card marg-1">Min return: <b>£610</b></p>
+                <p class="card marg-1">Max return: <b>£645</b></p> -->
+            </div>
+        </section>
+
+        <section class="card marg-1 center-text padd-1">
+            <h1 class="light-back padd-1 marg-1 center-text">Selected games</h1>
+            <div id="games-list" class="games-list">
+
+
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+<script type="text/javascript" src="./index.js" charset="utf-8"></script>

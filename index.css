@@ -1,0 +1,15 @@
+.center-text {
+    text-align: center;
+}
+.d-inline-block {
+    display: inline-block;
+}
+.padd-1 {
+    padding: 1rem;
+}
+.marg-1 {
+    margin:1rem;
+}
+.light-back {
+    background-color: rgb(215, 232, 247);
+}
