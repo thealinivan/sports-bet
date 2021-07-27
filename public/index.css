@@ -17,8 +17,14 @@
 .light-back {
     background-color: rgba(166, 226, 203, 0.63);
 }
-.won {
+.success {
     background-color: rgba(166, 226, 169, 0.63);
+}
+.failed {
+    background-color: rgba(221, 163, 163, 0.63);
+}
+.null{
+    background-color: rgba(156, 153, 153, 0.63);
 }
 .bd{
     border: 1px solid rgb(209, 209, 209);
@@ -55,4 +61,13 @@
 .stats-section:hover {
     max-height:2000px; 
     transition: max-height 0.25s ease-in;   
+}
+.stats-item:hover{
+    background-color: rgba(166, 226, 169, 0.63);
+  
+    transition: all 0.25s ease-in;  
+}
+.stats-item > p,
+.stats-item > h2 {
+      cursor: pointer;
 }

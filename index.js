@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 app.use(cors());
 app.use(express.json());
 const PORT = 5000;
+const Odd = require('./Odd');
 
 const initBet = 10.00;
 let acumulator = {
@@ -16,13 +18,6 @@ let acumulator = {
 
 //round
 const round = no => { return Math.round(no * 100) / 100 }
-
-//Scrape
-const scrape = (betHouse, url) => {
-    //to be replaced with scraping algorithm
-    data = url;
-    return data
-}
 
 //Max odds
 const calculateMaxOdds = hData => {
@@ -37,19 +32,22 @@ const calculateMaxOdds = hData => {
                 id: 1,
                 type: "1",
                 betHouse: m1.betHouse,
-                odd: m1.left
+                odd: m1.left,
+                status: "success"
             },
             draw: {
                 id: 2,
                 type: "X",
                 betHouse: m1.betHouse,
-                odd: m1.draw
+                odd: m1.draw,
+                status: "success"
             },
             right: {
                 id: 3,
                 type: "2",
                 betHouse: m1.betHouse,
-                odd: m1.right
+                odd: m1.right,
+                status: "success"
             }
         };
 
@@ -99,9 +97,6 @@ const calculateWinningOdds = (maxOddsMatches) => {
             wOdds[1].return = round(bet1r);
             wOdds[2].bet = round(favBet);
             wOdds[2].return = round(favBetr);
-            //to be integrated as part of the scrapping component
-            wOdds[2].status = "won";
-
             wOdds.sort((function (a, b) { return a.id - b.id; }));
             match.left = wOdds[0];
             match.draw = wOdds[1];
@@ -122,15 +117,29 @@ const bettWinningOdds = winningOdds => {
         acumulator.maxReturn += wOdds[2].return;
         //initiate betting
         wOdds.forEach(bet => {
-            //betting algorithm
             console.log(`House ${bet.betHouse} | Type: ${bet.type} | Odds: ${bet.odd} | Bet: ${bet.bet}`);
+            //betting algorithm
+            //..
+
+            //add status key after attempting betting (success or failed)
+            //..
         })
     });
-
 }
 
 
-//Data
+
+//DATA
+
+//Scrape data
+const scrape = (betHouse, url) => {
+    //to be replaced with scraping algorithm
+    data = url;
+
+    //should return array of objects
+    return data
+}
+
 url0 = [
     {
         id: "match1",
@@ -240,13 +249,31 @@ const maxOdds = calculateMaxOdds(housesData);
 const winningOdds = calculateWinningOdds(maxOdds);
 bettWinningOdds(winningOdds);
 
-//get endpoint for domestic data
-app.get('/data', function (req, res) {
-    res.status(200).send({
-        maxOdds: maxOdds,
-        winningOdds: winningOdds,
-        acumulator: acumulator
-    });
+
+// store data into databas
+const MONGODB_URI = "mongodb+srv://root:pass@cluster0.m4j22.mongodb.net/sports-bet";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(async () => {
+        console.log(`Connected to database`);
+        await Odd.deleteMany({})
+        maxOdds.forEach(async (mo) => {
+            const odds = new Odd(mo);
+            await odds.save(odds);
+        })
+    })
+    .catch(error => console.log(`Could not connect to database: ${error}`));
+
+// send data to client
+app.get('/data', async (req, res) => {
+    try {
+        res.status(200).send({
+            maxOdds: maxOdds,
+            winningOdds: winningOdds,
+            acumulator: acumulator
+        });
+    } catch {
+        res.status(404).send({ error: `The request could not be completed` });
+    }
 });
 app.listen(PORT, () => console.log(`App runinng at: ${PORT}`));
 
