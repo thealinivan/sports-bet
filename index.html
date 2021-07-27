@@ -22,11 +22,11 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" href="index.html">
                         <img src="img/logo.jpg" alt="sportsbet logo" style="width:40px;">
-                        <b>SportsBet</b>
+                        <b class="gray">SportsBet</b>
                     </a>
                     <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"
-                            id="search">
+                        <input id="field-search" class="form-control me-2" type="search" placeholder="Search matches.."
+                            aria-label="Search" id="search">
                         <button id="btn" href="#" class="btn btn-outline-success" type="submit" id="btn">Search</button>
                     </form>
 
@@ -36,23 +36,45 @@
     </header>
 
     <main>
-        <section class="card marg-1 center-text padd-1">
-            <h1 class="light-back padd-1 marg-1">Statistics</h1>
+        <section class="stats-section marg-1 center-text padd-1">
+            <h1 class="light-back padd-1 marg-1 gray">Statistics</h1>
             <div>
-                <p id="total-games" class="card marg-1"></p>
-                <p id="bet-games" class="card marg-1"></p>
-                <p id="total-bet" class="card marg-1"></p>
-                <p id="min-return" class="card marg-1"></p>
-                <p id="max-return" class="card marg-1"></p>
-                <p id="max-profit" class="card marg-1"></p>
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Current Games</p>
+                    <h2 id="total-games" class="marg-1"></h2>
+                </div>
+
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Betted Games</p>
+                    <h2 id="bet-games" class="marg-1"></h2>
+                </div>
+
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Total Bet</p>
+                    <h2 id="total-bet" class="marg-1"></h2>
+                </div>
+
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Min Return</p>
+                    <h2 id="min-return" class="marg-1"></h2>
+                </div>
+
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Max Return</p>
+                    <h2 id="max-return" class="marg-1"></h2>
+                </div>
+
+                <div class="stats-item marg-1 padd-1 d-inline-block">
+                    <p class="gray">Max Profit</p>
+                    <h2 id="max-profit" class="marg-1"></h2>
+                </div>
             </div>
         </section>
 
         <section class="card marg-1 center-text padd-1">
-            <h1 class="light-back padd-1 marg-1 center-text">Selected games</h1>
-            <div id="games-list" class="games-list">
-
-
+            <h1 class="light-back padd-1 marg-1 center-text gray">Selected games</h1>
+            <div id="games-list" class="container games-list">
+                <!-- current games here -->
             </div>
         </section>
     </main>
