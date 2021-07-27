@@ -3,12 +3,17 @@
 let winningOdds;
 let maxOdds;
 let acumulator;
-axios.get('http://localhost:5500/data')
+axios.get('http://localhost:5000/data')
     .then(res => {
         winningOdds = res.data.winningOdds;
         maxOdds = res.data.maxOdds;
         acumulator = res.data.acumulator;
         renderToDOM(winningOdds, maxOdds, acumulator);
+    })
+    .catch(err => {
+        console.log(err);
+        alert(`Something went wrong`);
+
     })
 
 //round

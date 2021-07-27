@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = 5500;
+const PORT = 5000;
 
 const initBet = 10.00;
 let acumulator = {
@@ -11,7 +11,6 @@ let acumulator = {
     minReturn: 0.0,
     maxReturn: 0.0
 }
-
 
 //FUNCTIONS
 
@@ -123,6 +122,7 @@ const bettWinningOdds = winningOdds => {
         acumulator.maxReturn += wOdds[2].return;
         //initiate betting
         wOdds.forEach(bet => {
+            //betting algorithm
             console.log(`House ${bet.betHouse} | Type: ${bet.type} | Odds: ${bet.odd} | Bet: ${bet.bet}`);
         })
     });
@@ -240,7 +240,6 @@ const maxOdds = calculateMaxOdds(housesData);
 const winningOdds = calculateWinningOdds(maxOdds);
 bettWinningOdds(winningOdds);
 
-
 //get endpoint for domestic data
 app.get('/data', function (req, res) {
     res.status(200).send({
@@ -250,8 +249,6 @@ app.get('/data', function (req, res) {
     });
 });
 app.listen(PORT, () => console.log(`App runinng at: ${PORT}`));
-
-
 
 
 
