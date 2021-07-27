@@ -1,0 +1,58 @@
+.center-text {
+    text-align: center;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+.padd-1 {
+    padding: 1rem;
+}
+.marg-1 {
+    margin:1rem;
+}
+.marg-bottom-1{
+    margin-bottom:1rem;
+}
+.light-back {
+    background-color: rgba(166, 226, 203, 0.63);
+}
+.won {
+    background-color: rgba(166, 226, 169, 0.63);
+}
+.bd{
+    border: 1px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    width:100%;
+    max-width:133px;
+}
+.match-item {
+    width:100%;
+    max-width: 450px;
+}
+.stats-item {
+    border: 1px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    width: 150px;
+    height: 130px;
+}
+.gray {
+    color: rgb(112, 112, 112);
+}
+.deep-gray {
+    color: rgb(77, 77, 77);
+}
+.stats-section {
+    max-height: 112px;
+     transition: max-height 0.15s ease-out;
+    overflow: hidden;
+    -moz-transition: max-height 1s ease;
+    -webkit-transition: height 1s ease;
+    -o-transition: height 1s ease;
+    transition: max-height 1s ease;
+}
+.stats-section:hover {
+    max-height:2000px; 
+    transition: max-height 0.25s ease-in;   
+}
