@@ -1,7 +1,16 @@
+const express = require('express');
+const cors = require('cors');
+const app = express();
+app.use(cors());
+app.use(express.json());
+const PORT = 5500;
+
 const initBet = 10.00;
-let totalBetAcumulator = 0.0;
-let minReturnAcumulator = 0.0;
-let maxReturnAcumulator = 0.0;
+let acumulator = {
+    totalBet: 0.0,
+    minReturn: 0.0,
+    maxReturn: 0.0
+}
 
 
 //FUNCTIONS
@@ -9,14 +18,14 @@ let maxReturnAcumulator = 0.0;
 //round
 const round = no => { return Math.round(no * 100) / 100 }
 
-//scrape
+//Scrape
 const scrape = (betHouse, url) => {
     //to be replaced with scraping algorithm
     data = url;
     return data
 }
 
-//calculate max odds
+//Max odds
 const calculateMaxOdds = hData => {
     let maxOdds = [];
     hData.shift().forEach(m1 => {
@@ -42,7 +51,7 @@ const calculateMaxOdds = hData => {
                 type: "2",
                 betHouse: m1.betHouse,
                 odd: m1.right
-            },
+            }
         };
 
         hData.forEach(house2 => {
@@ -68,14 +77,12 @@ const calculateMaxOdds = hData => {
     return maxOdds;
 }
 
-//filter winning odds
+//Winning odds
 const calculateWinningOdds = (maxOddsMatches) => {
     let winningMatches = [];
-
     maxOddsMatches.forEach(match => {
         let wOdds = [match.left, match.draw, match.right];
         wOdds.sort((function (a, b) { return a.odd - b.odd; })).reverse();
-
         let bet0 = initBet
         let bet1 = bet0 * wOdds[0].odd / wOdds[1].odd
         let favBet = bet0 * wOdds[0].odd - (bet0 + bet1)
@@ -86,7 +93,6 @@ const calculateWinningOdds = (maxOddsMatches) => {
         let minR = bet0 * wOdds[0].odd
         let maxR = favBet * wOdds[2].odd
         let profit = maxR - totalBet
-
         if (profit > 0) {
             wOdds[0].bet = round(initBet);
             wOdds[0].return = round(bet0r);
@@ -94,119 +100,37 @@ const calculateWinningOdds = (maxOddsMatches) => {
             wOdds[1].return = round(bet1r);
             wOdds[2].bet = round(favBet);
             wOdds[2].return = round(favBetr);
-
             //to be integrated as part of the scrapping component
             wOdds[2].status = "won";
 
             wOdds.sort((function (a, b) { return a.id - b.id; }));
-
             match.left = wOdds[0];
             match.draw = wOdds[1];
             match.right = wOdds[2];
-
             winningMatches.push(match)
         }
-
     })
     return winningMatches;
 }
 
-//FE
-//reder data to DOM
-const renderToDOM = winOdds => {
-
-    winOdds.forEach(match => {
-        let currentOdds = [match.left, match.draw, match.right];
-        currentOdds.sort((function (a, b) { return a.return - b.return; }));
-
-        const game = `
-            <div id=${match.id} class="match-item bd padd-1 center-text d-inline-block">
-                <h4 class="padd-1 center-text deep-gray">${match.leftTeam} vs ${match.rightTeam}</h4>
-                <div>
-                <p class="bd gray d-inline-block">Total bet: <b>${match.left.bet + match.draw.bet + match.right.bet}</b></p>
-                <p class="bd gray d-inline-block">Min return: <b>${currentOdds[0].return}</b></p>
-                <p class="bd gray d-inline-block">Max return: <b>${currentOdds[2].return}</b></p>
-                </div>
-                <br>
-                <div>
-                    <div id=${match.left.id} class="${match.left.status} bd padd-1 d-inline-block">
-                        <p class="light-back deep-gray"><b>${match.left.type}</b></p>
-                        <br>
-                        <h5><b>${match.left.odd}</b></h5>
-                        <p class="deep-gray">${match.left.betHouse}</p>
-                        <br>
-                        <p class="gray">Bet: <b>${match.left.bet}</b></p>
-                        <p class="gray">Return: <b>${match.left.return}</b></p>
-                    </div>
-                    <div id=${match.draw.id} class="${match.draw.status} bd padd-1 d-inline-block">
-                        <p class="light-back deep-gray"><b>${match.draw.type}</b></p>
-                        <br>
-                        <h5><b>${match.draw.odd}</b></h5>
-                        <p class="deep-gray">${match.draw.betHouse}</p>
-                        <br>
-                        <p class="gray">Bet: <b>${match.draw.bet}</b></p>
-                        <p class="gray">Return: <b>${match.draw.return}</b></p>
-                    </div>
-                    <div id=${match.right.id} class="${match.right.status} bd padd-1 d-inline-block">
-                        <p class="light-back deep-gray"><b>${match.right.type}</b></p>
-                        <br>
-                        <h5><b>${match.right.odd}</b></h5>
-                        <p class="deep-gray">${match.right.betHouse}</p>
-                        <br>
-                        <p class="gray">Bet: <b>${match.right.bet}</b></p>
-                        <p class="gray">Return: <b>${match.right.return}</b></p>
-                    </div>
-                </div>
-            </div>
-        `;
-        const list = document.getElementById(`games-list`);
-        $(list).append(game);
-    })
-    document.getElementById("total-games").innerHTML = `<b>${maxOdds.length}</b>`;
-    document.getElementById("bet-games").innerHTML = `<b>${winningOdds.length}</b>`;
-    document.getElementById("total-bet").innerHTML = `<b>${round(totalBetAcumulator)}</b>`;
-    document.getElementById("min-return").innerHTML = `<b>${round(minReturnAcumulator)}</b>`;
-    document.getElementById("max-return").innerHTML = `<b>${round(maxReturnAcumulator)}</b>`;
-    document.getElementById("max-profit").innerHTML = `<b>${round(maxReturnAcumulator - totalBetAcumulator)}</b>`;
-}
-
-//FE
-//search
-const search = () => {
-    const output = document.getElementById("games-list");
-    output.innerHTML = "";
-    let filtered = maxOdds.filter(match => (match.leftTeam.toLowerCase() + match.rightTeam.toLowerCase())
-        .includes($('#field-search').val().toLowerCase()));
-    $('#field-search').val() == "" ? renderToDOM(winningOdds) : renderToDOM(filtered);
-}
-
-//bet
+//Bet
 const bettWinningOdds = winningOdds => {
-
     winningOdds.forEach(match => {
-        //get stats
         let wOdds = [match.left, match.draw, match.right];
         wOdds.sort((function (a, b) { return a.odd - b.odd; })).reverse();
-        totalBetAcumulator += match.left.bet + match.draw.bet + match.right.bet;
-        minReturnAcumulator += wOdds[0].return;
-        maxReturnAcumulator += wOdds[2].return;
-
+        acumulator.totalBet += match.left.bet + match.draw.bet + match.right.bet;
+        acumulator.minReturn += wOdds[0].return;
+        acumulator.maxReturn += wOdds[2].return;
         //initiate betting
         wOdds.forEach(bet => {
             console.log(`House ${bet.betHouse} | Type: ${bet.type} | Odds: ${bet.odd} | Bet: ${bet.bet}`);
         })
     });
 
-
-    //update UI
-    //(to be replaced with sending response to client)
-    renderToDOM(winningOdds);
 }
 
 
-//DATA
-
-//target urls
+//Data
 url0 = [
     {
         id: "match1",
@@ -297,7 +221,8 @@ url2 = [
     }
 ]
 
-//LOGIC
+
+//APP
 
 //house names
 bh0 = "paddypower"
@@ -313,15 +238,20 @@ const housesData = [betHouse0, betHouse1, betHouse2];
 //get max odss data
 const maxOdds = calculateMaxOdds(housesData);
 const winningOdds = calculateWinningOdds(maxOdds);
-console.log(winningOdds);
 bettWinningOdds(winningOdds);
 
-//event listeners
-document.getElementById('field-search').addEventListener('keyup', (event) => {
-    event.preventDefault();
-    console.log("keyup");
-    search();
-})
+
+//get endpoint for domestic data
+app.get('/data', function (req, res) {
+    res.status(200).send({
+        maxOdds: maxOdds,
+        winningOdds: winningOdds,
+        acumulator: acumulator
+    });
+});
+app.listen(PORT, () => console.log(`App runinng at: ${PORT}`));
+
+
 
 
 
