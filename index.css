@@ -11,5 +11,12 @@
     margin:1rem;
 }
 .light-back {
-    background-color: rgb(215, 232, 247);
+    background-color: rgba(166, 226, 203, 0.63);
+}
+.won {
+    background-color: rgba(166, 226, 169, 0.63);
+}
+.bd{
+    border: 1px solid rgb(209, 209, 209);
+    border-radius:
 }
